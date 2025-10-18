@@ -11,7 +11,7 @@ internal static class Patches {
 	[HarmonyWrapSafe]
 	[HarmonyPrefix]
 	private static void Setup(UIManager __instance) {
-		SavePageState.slotButtons = [
+		SavePageState.buttons = [
 			__instance.slotOne,
 			__instance.slotTwo,
 			__instance.slotThree,
@@ -20,7 +20,7 @@ internal static class Patches {
 
 		SavePageState.SetPageByLastIndex(); // Affects which to preload
 
-		foreach (SaveSlotButton button in SavePageState.slotButtons) {
+		foreach (SaveSlotButton button in SavePageState.buttons) {
 			Text text = button.slotNumberText.GetComponent<Text>();
 			text.horizontalOverflow = HorizontalWrapMode.Overflow; // Make multiple digits fit in
 			text.alignment = TextAnchor.LowerLeft;
@@ -32,6 +32,8 @@ internal static class Patches {
 
 		Plugin.Logger.LogDebug("Setup complete");
 	}
+
+	#region Menu sequences
 
 	[HarmonyPatch(typeof(UIManager), nameof(UIManager.UIGoToProfileMenu))]
 	[HarmonyWrapSafe]
@@ -64,7 +66,7 @@ internal static class Patches {
 	[HarmonyPatch(typeof(UIManager), nameof(UIManager.HideSaveProfileMenu), MethodType.Enumerator)]
 	[HarmonyWrapSafe]
 	[HarmonyTranspiler]
-	private static IEnumerable<CodeInstruction> ModifyHideProfileSequence(IEnumerable<CodeInstruction> insts) => new CodeMatcher(insts)
+	private static IEnumerable<CodeInstruction> HideButtonsAtOnce(IEnumerable<CodeInstruction> insts) => new CodeMatcher(insts)
 		.MatchForward( // Make them disappear at the same time
 			false,
 			[new(OpCodes.Ldc_R4, 0.165f)] // Do match the operand here since Repeat will not throw if not found
@@ -72,12 +74,21 @@ internal static class Patches {
 		.Repeat(matcher => matcher.SetOperandAndAdvance(0f))
 		.InstructionEnumeration();
 
+	#endregion
+
+	#region Indices
 
 	[HarmonyPatch(typeof(SaveSlotButton), nameof(SaveSlotButton.SaveSlotIndex), MethodType.Getter)]
 	[HarmonyWrapSafe]
 	[HarmonyPostfix]
 	private static void OffsetSlotIndex(ref int __result) =>
 		__result += SavePageState.CurrentIndexBase;
+
+	[HarmonyPatch(typeof(Platform), nameof(Platform.IsSaveSlotIndexValid))]
+	[HarmonyWrapSafe]
+	[HarmonyPostfix]
+	private static void MakeAllIndicesValid(int slotIndex, ref bool __result) =>
+		__result = slotIndex >= 0;
 
 	[HarmonyPatch(typeof(SaveSlotButton), nameof(SaveSlotButton.Awake))]
 	[HarmonyPatch(typeof(SaveSlotButton), nameof(SaveSlotButton.Prepare))]
@@ -86,10 +97,5 @@ internal static class Patches {
 	private static void UpdateSlotNumberText(SaveSlotButton __instance) =>
 		__instance.slotNumberText.GetComponent<Text>().text = SavePageState.GenerateSlotNumberText(__instance);
 
-	
-	[HarmonyPatch(typeof(Platform), nameof(Platform.IsSaveSlotIndexValid))]
-	[HarmonyWrapSafe]
-	[HarmonyPostfix]
-	private static void MakeAllIndicesValid(int slotIndex, ref bool __result) =>
-		__result = slotIndex >= 0;
+	#endregion
 }

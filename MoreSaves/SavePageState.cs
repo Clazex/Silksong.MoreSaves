@@ -7,7 +7,7 @@ internal static class SavePageState {
 
 	private static readonly WaitForSecondsRealtime navigationWait = new(0.2f);
 
-	internal static SaveSlotButton[] slotButtons = [];
+	internal static SaveSlotButton[] buttons = [];
 
 	internal static int CurrentPage { get; private set; } = 0;
 	private static int LastPage { get; set; } = 0;
@@ -46,13 +46,13 @@ internal static class SavePageState {
 		UIManager ui = UIManager.instance;
 		int highlight = GetLastSlotIndex();
 
-		foreach (SaveSlotButton button in slotButtons) {
+		foreach (SaveSlotButton button in buttons) {
 			button.ResetButton(gm, false); // Only do preload
 		}
 
 		yield return navigationWait;
-		foreach (SaveSlotButton button in slotButtons) {
-			button.Prepare(gm, fetchRestorePoints: true);
+		foreach (SaveSlotButton button in buttons) {
+			button.Prepare(gm);
 			if (button.SaveSlotIndex == highlight) {
 				ui.saveSlots.itemToHighlight = button;
 				ui.saveSlots.HighlightDefault();
