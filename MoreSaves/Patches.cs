@@ -28,6 +28,7 @@ internal static class Patches {
 			text.text = SavePageState.GenerateSlotNumberText(button);
 		}
 
+		CopySaveController.Setup(__instance);
 		__instance.gameObject.AddComponent<SavePageNavigator>();
 
 		Plugin.Logger.LogDebug("Setup complete");
@@ -96,6 +97,52 @@ internal static class Patches {
 	[HarmonyPrefix]
 	private static void UpdateSlotNumberText(SaveSlotButton __instance) =>
 		__instance.slotNumberText.GetComponent<Text>().text = SavePageState.GenerateSlotNumberText(__instance);
+
+	#endregion
+
+	#region Clipboard
+
+	[HarmonyPatch(typeof(UIManager), nameof(UIManager.UIContinueGame), typeof(int), typeof(SaveGameData))]
+	[HarmonyWrapSafe]
+	[HarmonyPrefix]
+	private static bool SelectSaveNonempty(int slot, SaveGameData saveGameData) =>
+		SaveClipboard.Select(slot, saveGameData);
+
+	[HarmonyPatch(typeof(UIManager), nameof(UIManager.UIGoToPlayModeMenu))]
+	[HarmonyPatch(typeof(UIManager), nameof(UIManager.StartNewGame))]
+	[HarmonyWrapSafe]
+	[HarmonyPrefix]
+	private static bool SelectSaveEmpty(UIManager __instance) =>
+		SaveClipboard.Select(__instance.gm.profileID, null);
+
+	[HarmonyPatch(typeof(RestoreSaveButton), nameof(RestoreSaveButton.SaveSelected))]
+	[HarmonyWrapSafe]
+	[HarmonyPrefix]
+	private static bool SelectRestorePoint(RestoreSaveButton __instance, RestorePointData restorePointData) {
+		bool continues = SaveClipboard.Select(__instance.saveSlotButton.SaveSlotIndex, restorePointData.saveGameData, restorePointData.autoSaveName);
+		if (!continues) {
+			__instance.saveSlotButton.ShowRelevantModeForSaveFileState();
+		}
+
+		return continues;
+	}
+
+	[HarmonyPatch(typeof(ClearSaveButton), nameof(ClearSaveButton.OnSubmit))]
+	[HarmonyWrapSafe]
+	[HarmonyPrefix]
+	private static void CancelCopy() =>
+		SaveClipboard.CancelCopy();
+
+	[HarmonyPatch(typeof(UIManager), nameof(UIManager.HideSaveProfileMenu))]
+	[HarmonyWrapSafe]
+	[HarmonyPostfix]
+	private static IEnumerator DelayedCancelCopy(IEnumerator __result) {
+		while (__result.MoveNext()) {
+			yield return __result.Current;
+		}
+
+		SaveClipboard.CancelCopy();
+	}
 
 	#endregion
 }
