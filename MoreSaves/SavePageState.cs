@@ -5,7 +5,7 @@ namespace MoreSaves;
 internal static class SavePageState {
 	internal const int SLOTS_PER_PAGE = 4;
 
-	private static readonly WaitForSecondsRealtime navigationWait = new(0.2f);
+	internal static readonly WaitForSecondsRealtime loadSaveWait = new(0.2f);
 
 	internal static SaveSlotButton[] buttons = [];
 
@@ -19,6 +19,9 @@ internal static class SavePageState {
 
 	private static int GetPageForSlot(int slot) =>
 		Mathf.FloorToInt((slot - 1f) / 4f);
+
+	internal static SaveSlotButton GetButtonForSlot(int slot) =>
+		buttons[(slot - 1) % 4];
 
 	internal static string GenerateSlotNumberText(SaveSlotButton button) =>
 		$"{button.SaveSlotIndex}.";
@@ -50,7 +53,7 @@ internal static class SavePageState {
 			button.ResetButton(gm, false); // Only do preload
 		}
 
-		yield return navigationWait;
+		yield return loadSaveWait;
 		foreach (SaveSlotButton button in buttons) {
 			button.Prepare(gm);
 			if (button.SaveSlotIndex == highlight) {
