@@ -4,7 +4,7 @@ using BepInEx.Configuration;
 
 using InControl;
 
-using UnityEngine.Assertions;
+using UnityKey = UnityEngine.KeyCode;
 
 namespace MoreSaves;
 
@@ -19,11 +19,11 @@ internal static class ConfigEntries {
 
 	internal static class KeyboardBindings {
 		internal static ConfigKeyField PreviousPage { get; } = new(
-			KeyCode.None,
+			UnityKey.None,
 			"Previous page binding, uses the Inventory Pane Left binding (\"[\") when set to \"None\""
 		);
 		internal static ConfigKeyField NextPage { get; } = new(
-			KeyCode.None,
+			UnityKey.None,
 			"Next page binding, uses the Inventory Pane Right binding (\"]\") when set to \"None\""
 		);
 	}
@@ -48,9 +48,11 @@ internal static class ConfigEntries {
 	}
 
 	private static void Bind<T>(this ConfigFile config, ConfigField<T> field, [CallerArgumentExpression(nameof(field))] string name = "") {
-		string[] parts = name.Split('.', StringSplitOptions.RemoveEmptyEntries);
-		Assert.AreEqual(2, parts.Length);
-		field.Bind(config, parts[0], parts[1]);
+		if (name.Split('.', StringSplitOptions.RemoveEmptyEntries) is [string section, string key]) {
+			field.Bind(config, section, key);
+		} else {
+			throw new InvalidOperationException($"Unexpected field name: {name}");
+		}
 	}
 
 	internal class ConfigField<T>(T defaultValue, string description, AcceptableValueBase? acceptableValues = null) {
@@ -76,11 +78,11 @@ internal static class ConfigEntries {
 		}
 	}
 
-	internal sealed class ConfigKeyField(KeyCode defaultValue, string description)
-		: ConfigField<KeyCode>(defaultValue, description, new AcceptableKeyCodes())
+	internal sealed class ConfigKeyField(UnityKey defaultValue, string description)
+		: ConfigField<UnityKey>(defaultValue, description, new AcceptableKeyCodes())
 	{
-		private static readonly Dictionary<KeyCode, Key> mappings = [];
-		private static readonly HashSet<KeyCode> validKeyCodes;
+		private static readonly Dictionary<UnityKey, Key> mappings = [];
+		private static readonly HashSet<UnityKey> validKeyCodes;
 
 		static ConfigKeyField() {
 			foreach (UnityKeyboardProvider.KeyMapping mapping in UnityKeyboardProvider.KeyMappings) {
@@ -88,18 +90,18 @@ internal static class ConfigEntries {
 				mappings[mapping.target1] = mapping.source; // target1 can be None which we'll handle later
 			}
 
-			mappings[KeyCode.None] = Key.None;
+			mappings[UnityKey.None] = Key.None;
 			validKeyCodes = [..mappings.Keys];
 		}
 
 		internal Key Key => mappings[Value];
 
 
-		private sealed class AcceptableKeyCodes() : AcceptableValueBase(typeof(KeyCode)) {
+		private sealed class AcceptableKeyCodes() : AcceptableValueBase(typeof(UnityKey)) {
 			public override bool IsValid(object value) =>
-				value is KeyCode keyCode && validKeyCodes.Contains(keyCode);
+				value is UnityKey keyCode && validKeyCodes.Contains(keyCode);
 			public override object Clamp(object value) =>
-				IsValid(value) ? value : KeyCode.None;
+				IsValid(value) ? value : UnityKey.None;
 			public override string ToDescriptionString() =>
 				"# Acceptable keys: " + string.Join(", ", validKeyCodes);
 		}
