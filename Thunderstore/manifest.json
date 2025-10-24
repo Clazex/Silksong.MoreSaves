@@ -1,7 +1,7 @@
 {
 	"name": "MoreSaves",
 	"description": "Allows you to have more saves.",
-	"version_number": "0.2.0",
+	"version_number": "0.3.0",
 	"website_url": "https://github.com/Clazex/Silksong.MoreSaves",
 	"dependencies": [
 		"BepInEx-BepInExPack_Silksong-5.4.2304"
