@@ -4,7 +4,7 @@ using BepInEx.Configuration;
 
 using InControl;
 
-using UnityKey = UnityEngine.KeyCode;
+using UnityKey = UnityEngine.InputSystem.Key;
 
 namespace MoreSaves;
 
