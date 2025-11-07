@@ -1,3 +1,8 @@
+# v0.2.1
+
+- Add experimental Save Clipboard
+- Accommodate to Unity input transition
+
 # v0.2.0
 
 - Refactor to use the Silksong template
