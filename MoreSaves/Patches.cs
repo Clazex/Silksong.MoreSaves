@@ -130,13 +130,13 @@ internal static class Patches {
 	[HarmonyPatch(typeof(ClearSaveButton), nameof(ClearSaveButton.OnSubmit))]
 	[HarmonyWrapSafe]
 	[HarmonyPrefix]
-	private static void CancelCopy() =>
+	private static void CancelCopyOnClear() =>
 		SaveClipboard.CancelCopy();
 
 	[HarmonyPatch(typeof(UIManager), nameof(UIManager.HideSaveProfileMenu))]
 	[HarmonyWrapSafe]
 	[HarmonyPostfix]
-	private static IEnumerator DelayedCancelCopy(IEnumerator __result) {
+	private static IEnumerator CancelCopyOnReturn(IEnumerator __result) {
 		while (__result.MoveNext()) {
 			yield return __result.Current;
 		}

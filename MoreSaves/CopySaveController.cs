@@ -24,6 +24,8 @@ internal sealed class CopySaveController: MonoBehaviour {
 		DestroyImmediate(buttonCopyGo.GetComponent<EventTrigger>());
 		buttonCopyGo.AddComponent<CopySaveController>();
 
+		CancelCopy();
+
 		MenuButton buttonCopy = buttonCopyGo.GetComponent<MenuButton>();
 		buttonCopy.buttonType = MenuButton.MenuButtonType.Activate; // Don't force deselect
 

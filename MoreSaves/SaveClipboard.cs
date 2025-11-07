@@ -17,13 +17,13 @@ internal static class SaveClipboard {
 		}
 	} = ClipboardState.Idle;
 
-	private static int index = 0;
+	private static int saveIndex = 0;
 	private static AutoSaveName name = AutoSaveName.NONE;
 	private static SaveGameData? data = null;
 
 	internal static string SaveName => name == AutoSaveName.NONE
-		? string.Format(Lang.Get("SaveIndex"), index)
-		: string.Format(Lang.Get("SaveIndexWithName"), index, GameManager.GetFormattedAutoSaveNameString(name));
+		? string.Format(Lang.Get("SaveIndex"), saveIndex)
+		: string.Format(Lang.Get("SaveIndexWithName"), saveIndex, GameManager.GetFormattedAutoSaveNameString(name));
 
 	internal static void StartCopy() {
 		if (State == ClipboardState.Idle) {
@@ -40,7 +40,7 @@ internal static class SaveClipboard {
 			return;
 		}
 
-		index = 0;
+		saveIndex = 0;
 		data = null;
 		State = ClipboardState.Idle;
 		Plugin.Logger.LogDebug("Copy cancelled");
@@ -49,7 +49,6 @@ internal static class SaveClipboard {
 	/// <returns>Continues executing original function</returns>
 	internal static bool Select(int slot, SaveGameData? saveData, AutoSaveName autoSaveName = AutoSaveName.NONE) {
 		if (State == ClipboardState.Idle) {
-			Plugin.Logger.LogError("Selection occurred when idle");
 			return true;
 		}
 
@@ -77,7 +76,7 @@ internal static class SaveClipboard {
 			return;
 		}
 
-		index = slot;
+		saveIndex = slot;
 		name = autoSaveName;
 		data = saveGameData;
 		State = ClipboardState.PasteSelect;

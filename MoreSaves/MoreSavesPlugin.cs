@@ -7,18 +7,10 @@ using HarmonyLib;
 namespace MoreSaves;
 
 [BepInAutoPlugin(id: "dev.clazex.moresaves")]
-public partial class MoreSavesPlugin : BaseUnityPlugin {
-	public static MoreSavesPlugin Instance {
-		get => field != null
-			? field
-			: throw new InvalidOperationException("instance not present");
-		private set;
-	}
+public sealed partial class MoreSavesPlugin : BaseUnityPlugin {
+	public static MoreSavesPlugin Instance { get; private set; } = null!;
 
-	internal static new ManualLogSource Logger {
-		get => field ?? throw new InvalidOperationException("instance not present");
-		private set;
-	}
+	internal static new ManualLogSource Logger { get; private set; } = null!;
 
 	private static Harmony Harmony { get; } = new(Id);
 
