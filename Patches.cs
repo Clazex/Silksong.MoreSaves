@@ -28,7 +28,10 @@ internal static class Patches {
 			text.text = SavePageState.GenerateSlotNumberText(button);
 		}
 
-		CopySaveController.Setup(__instance);
+		if (ConfigEntries.Experimental.SaveClipboard.Value) {
+			CopySaveController.Setup(__instance);
+		}
+
 		__instance.gameObject.AddComponent<SavePageNavigator>();
 
 		Plugin.Logger.LogDebug("Setup complete");

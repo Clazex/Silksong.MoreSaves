@@ -39,12 +39,20 @@ internal static class ConfigEntries {
 		);
 	}
 
+	internal static class Experimental {
+		internal static ConfigField<bool> SaveClipboard { get; } = new(
+			false,
+			"Add a button for copying saves"
+		);
+	}
+
 	internal static void Bind(ConfigFile config) {
 		config.Bind(Pagination.MaxPages);
 		config.Bind(KeyboardBindings.PreviousPage);
 		config.Bind(KeyboardBindings.NextPage);
 		config.Bind(ControllerBindings.PreviousPage);
 		config.Bind(ControllerBindings.NextPage);
+		config.Bind(Experimental.SaveClipboard);
 	}
 
 	private static void Bind<T>(this ConfigFile config, ConfigField<T> field, [CallerArgumentExpression(nameof(field))] string name = "") {

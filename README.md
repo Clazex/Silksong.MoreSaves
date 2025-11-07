@@ -18,9 +18,10 @@ Inspired by [More Saves](https://github.com/TheMulhima/MoreSaves) for Hollow Kni
 - Next page: uses inventory pane right binding by default, `]` for keyboard, `RB`/`RT` for controller
 - Configurable to use custom bindings, supports configuration manager
 
-## Save Clipboard
+## Save Clipboard (Experimental)
 
-- Click `Copy Save` button to begin save-copying
+- This feature is not enabled by default, and may cause issues with save-specific mod data.
+- Click `Copy Save` button to begin save copying
 - Click an existing save, or click restore save button and select a restore point to copy into clipboard
 - Click an empty slot to paste the save in the clipboard into it
 - To cancel copy, Click `Copy Save` button again or click `Back` button
@@ -46,8 +47,9 @@ Inspired by [More Saves](https://github.com/TheMulhima/MoreSaves) for Hollow Kni
 - 下一页：默认使用物品栏向右翻页绑定，键盘 `]`，手柄 `RB`/`RT`
 - 可配置自定义按键绑定，支持配置管理器
 
-## 存档剪贴板
+## 存档剪贴板（实验性）
 
+- 此功能默认禁用，可能会导致特定于存档的模组数据出现问题
 - 点击`复制存档`按钮开始存档复制
 - 点击一个现有存档，或者点击恢复存档按钮并选择一个恢复点，将其复制到剪贴板
 - 点击一个空槽位，将剪贴板中的存档粘贴到其中
