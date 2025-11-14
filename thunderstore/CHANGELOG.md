@@ -1,3 +1,7 @@
+# v0.2.2
+
+- Accommodate for changes in Patch 1.0.29315
+
 # v0.2.1
 
 - Add experimental Save Clipboard
