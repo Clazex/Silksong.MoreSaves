@@ -32,33 +32,34 @@ internal sealed class NavigationActionSet : PlayerActionSet {
 
 	private NavigationActionSet() {
 		Plugin.Logger.LogDebug("Creating navigation action set");
+		HeroActions actions = InputHandler.Instance.inputActions;
 
 		if (ConfigEntries.KeyboardBindings.PreviousPage.Key is Key keyPrev and not Key.None) {
 			keyboardPrev = new("Keyboard Prev Page", this);
 			keyboardPrev.AddDefaultBinding(keyPrev);
 		} else {
-			keyboardPrev = InputHandler.Instance.inputActions.PaneLeft;
+			keyboardPrev = actions.PaneLeft;
 		}
 
 		if (ConfigEntries.KeyboardBindings.NextPage.Key is Key keyNext and not Key.None) {
 			keyboardNext = new("Keyboard Next Page", this);
 			keyboardNext.AddDefaultBinding(keyNext);
 		} else {
-			keyboardNext = InputHandler.Instance.inputActions.PaneRight;
+			keyboardNext = actions.PaneRight;
 		}
 
 		if (ConfigEntries.ControllerBindings.PreviousPage.Value is InputControlType inputPrev and not InputControlType.None) {
 			controllerPrev = new("Controller Prev Page", this);
 			controllerPrev.AddDefaultBinding(inputPrev);
 		} else {
-			controllerPrev = InputHandler.Instance.inputActions.PaneLeft;
+			controllerPrev = actions.PaneLeft;
 		}
 
 		if (ConfigEntries.ControllerBindings.NextPage.Value is InputControlType inputNext and not InputControlType.None) {
 			controllerNext = new("Controller Next Page", this);
 			controllerNext.AddDefaultBinding(inputNext);
 		} else {
-			controllerNext = InputHandler.Instance.inputActions.PaneRight;
+			controllerNext = actions.PaneRight;
 		}
 	}
 }

@@ -43,8 +43,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Remove="thunderstore/temp;thunderstore/dist" />
-		<None Include="README.md" Pack="True" PackagePath="README.md" />
-		<None Include="thunderstore/icon.png" Pack="True" PackagePath="icon.png" />
+		<None Include="../README.md" Pack="True" PackagePath="README.md" />
+		<None Include="../thunderstore/icon.png" Pack="True" PackagePath="icon.png" />
 	</ItemGroup>
 	<Target Name="CopyAndPackageMod" AfterTargets="PostBuildEvent">
 		<ItemGroup>
@@ -52,7 +52,7 @@
 			<Binaries Include="$(TargetDir)/$(TargetName).pdb" LocalDir="/" PackDir="/" />
 		</ItemGroup>
 		<PropertyGroup>
-			<ThunderstoreDir>$(ProjectDir)/thunderstore</ThunderstoreDir>
+			<ThunderstoreDir>$(ProjectDir)/../thunderstore</ThunderstoreDir>
 		</PropertyGroup>
 		<Copy SourceFiles="@(Binaries)" DestinationFolder="$(SilksongFolder)/BepInEx/plugins/Clazex-$(AssemblyTitle)/%(Binaries.LocalDir)" Condition="'$(SilksongFolder)' != '' And Exists('$(SilksongFolder)')" />
 		<RemoveDir Directories="$(ThunderstoreDir)/temp;$(ThunderstoreDir)/dist" />
