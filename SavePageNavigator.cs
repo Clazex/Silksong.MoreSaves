@@ -24,11 +24,7 @@ internal sealed class SavePageNavigator : MonoBehaviour {
 			bulkNavCooldown -= Time.unscaledDeltaTime;
 		}
 
-		if (
-			ui.uiState != GlobalEnums.UIState.MAIN_MENU_HOME
-			|| ui.menuState != GlobalEnums.MainMenuState.SAVE_PROFILES
-			|| !ih.acceptingInput
-		) {
+		if (!ui.saveProfileControls.interactable || !ih.acceptingInput) {
 			return;
 		}
 
