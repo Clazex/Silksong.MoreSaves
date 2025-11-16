@@ -24,7 +24,7 @@ internal sealed class SavePageNavigator : MonoBehaviour {
 			bulkNavCooldown -= Time.unscaledDeltaTime;
 		}
 
-		if (!ui.saveProfileControls.interactable || !ih.acceptingInput) {
+		if (!ih.acceptingInput || !ui.saveProfileControls || !ui.saveProfileControls.interactable) {
 			return;
 		}
 
