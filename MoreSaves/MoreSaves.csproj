@@ -34,7 +34,7 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="UnityEngine.Modules" Version="6000.0.50" IncludeAssets="compile" />
-		<PackageReference Include="Silksong.GameLibs" Version="*-*" PrivateAssets="all" />
+		<PackageReference Include="Silksong.GameLibs" Version="1.1.0-silksong1.0.29315" PrivateAssets="all" />
 		<PackageReference Include="Fody" Version="6.9.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
